@@ -13,13 +13,11 @@ def index():
 def calculate():
     form = forms.LoginForm()
     if form.validate_on_submit():
-        result = abs(int(str(form.end_date.data - form.start_date.data).split(" ")[0]))
+        if form.end_date.data == form.start_date.data:
+            result = "Это та же самая дата."
+        else:
+            result = str(abs(int(str(form.end_date.data - form.start_date.data).split(" ")[0])))
+            result += " - именно столько дней между этими датами"
+        return render_template("calculate.html", form=form, result=result)
+    return render_template("calculate.html", form=form, result=0)
 
-        return redirect(url_for("result", result=result))
-    return render_template("calculate.html", form=form)
-
-
-@app.route('/result')
-def result():
-    r = request.args.get('result')
-    return render_template("result.html", result=r)
